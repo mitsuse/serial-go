@@ -7,7 +7,7 @@ build:
             code: |
                 go get -t ./...
         - mitsuse/gover:
-            project: "github.com/mitsuse/binary-go"
+            project: "github.com/mitsuse/serial-go"
             report: "coverage.txt"
         - script:
             name: codecov
