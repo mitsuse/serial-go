@@ -1,4 +1,4 @@
-package binary
+package serial
 
 import (
 	"encoding/binary"
