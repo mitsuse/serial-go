@@ -4,7 +4,7 @@
 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)][godoc]
 [![Version](https://img.shields.io/github/tag/mitsuse/serial-go.svg?style=flat-square)][release]
 [![Wercker](http://img.shields.io/wercker/ci/55b8de7c58d352a50100488b.svg?style=flat-square)][wercker]
-[![Coverage](https://img.shields.io/codecov/c/github/mitsuse/serial-go/develop.svg?style=flat-square)][coverage]
+[![Coverage](https://img.shields.io/codecov/c/github/mitsuse/serial-go.svg?style=flat-square)][coverage]
 
 [license]: LICENSE.txt
 [godoc]: http://godoc.org/github.com/mitsuse/serial-go
