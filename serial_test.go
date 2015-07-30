@@ -26,7 +26,7 @@ func TestConvertToArchTypeSucceedsForAmd64(t *testing.T) {
 func TestConvertToArchTypeSucceedsForArm(t *testing.T) {
 	arch := "arm"
 
-	if convertToArchType(arch) != ARCH_AMD64 {
+	if convertToArchType(arch) != ARCH_ARM {
 		t.Fatal("arm should be converted to ARCH_ARM")
 	}
 }
@@ -59,6 +59,14 @@ func TestWriterWriteSucceedsWithAcceptableValueForBinaryWrite(t *testing.T) {
 		if r := result[i]; r != b {
 			t.Fatalf("An element at the index %d should be %d, but is %d.", i, b, r)
 		}
+	}
+
+	if len(expectation) != len(result) {
+		t.Fatalf(
+			"The size of byte-sequence representation should be %d, but is %d.",
+			len(expectation),
+			len(result),
+		)
 	}
 }
 
