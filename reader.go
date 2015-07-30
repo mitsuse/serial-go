@@ -19,6 +19,10 @@ type Reader struct {
 }
 
 // Create a wrapper of "encoding/binary"'s Read.
+// "id" is the identifier of byte-sequence representation to be read.
+// "version" is used to checking the compatibility of byte-sequence representation.
+// If "id" or "version is not same as read ones,
+// the reader stores an error value into itself.
 func NewReader(id string, version byte, reader io.Reader) *Reader {
 	r := &Reader{
 		id:      id,
@@ -29,7 +33,10 @@ func NewReader(id string, version byte, reader io.Reader) *Reader {
 	return r
 }
 
-// Read the identifier of type by using (*Reader).Read.
+// Read the identifier of type by using (*Reader).Read
+// and check whether it equals to r.id.
+// If it is not same as r.id,
+// the reader stores an error value into itself.
 func (r *Reader) ReadId() {
 	id := []byte(r.id)
 	size := len(id)
@@ -50,7 +57,10 @@ func (r *Reader) ReadId() {
 	}
 }
 
-// Read the version of byte-sequence representation by using (*Reader).Read.
+// Read the version of byte-sequence representation by using (*Reader).Read
+// and check whether it equals to r.version with element-wise manner.
+// If it is not same as r.version,
+// the reader stores an error value into itself.
 func (r *Reader) ReadVersion() {
 	var version byte
 
@@ -66,7 +76,10 @@ func (r *Reader) ReadVersion() {
 	}
 }
 
-// Read the archtecture by using (*Reader).Read.
+// Read the architecture  by using (*Reader).Read
+// and check whether it equals to the current architecture.
+// If it is not same as r.version,
+// the reader stores an error value into itself.
 func (r *Reader) ReadArch() {
 	var arch byte
 

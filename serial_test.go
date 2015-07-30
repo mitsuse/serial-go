@@ -11,7 +11,7 @@ func TestConvertToArchTypeSucceedsFor386(t *testing.T) {
 	arch := "386"
 
 	if convertToArchType(arch) != ARCH_386 {
-		t.Fatal("366 should be converted to ARCH_386")
+		t.Fatal("386 should be converted to ARCH_386")
 	}
 }
 

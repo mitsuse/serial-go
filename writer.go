@@ -18,6 +18,10 @@ type Writer struct {
 }
 
 // Create a wrapper of "encoding/binary"'s Write.
+// "id" is the identifier of byte-sequence representation to be written.
+// "version" is used to checking the compatibility of byte-sequence representation.
+// If "id" or "version is not same as read ones,
+// the reader stores an error value into itself.
 func NewWriter(id string, version byte, writer io.Writer) *Writer {
 	w := &Writer{
 		id:      id,
@@ -40,7 +44,7 @@ func (w *Writer) WriteVersion() {
 	w.Write(w.version)
 }
 
-// Write the current archtechture by using (*Writer).Write.
+// Write the current architecture by using (*Writer).Write.
 func (w *Writer) WriteArch() {
 	w.Write(convertToArchType(runtime.GOARCH))
 }
