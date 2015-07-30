@@ -26,7 +26,7 @@ func TestConvertToArchTypeSucceedsForAmd64(t *testing.T) {
 func TestConvertToArchTypeSucceedsForArm(t *testing.T) {
 	arch := "arm"
 
-	if convertToArchType(arch) != ARCH_AMD64 {
+	if convertToArchType(arch) != ARCH_ARM {
 		t.Fatal("arm should be converted to ARCH_ARM")
 	}
 }
