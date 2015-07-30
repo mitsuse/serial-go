@@ -7,10 +7,12 @@ import (
 )
 
 func TestWriterWriteSucceedsWithAcceptableValueForBinaryWrite(t *testing.T) {
+	var id string = "test"
+	var version byte = 0
 	var test int64 = 1
 
 	buffer := bytes.NewBuffer([]byte{})
-	writer := NewWriter(buffer)
+	writer := NewWriter(id, version, buffer)
 
 	writer.Write(&test)
 
@@ -29,10 +31,12 @@ func TestWriterWriteSucceedsWithAcceptableValueForBinaryWrite(t *testing.T) {
 }
 
 func TestWriterWriteFailsWithUnacceptableValueForBinaryWrite(t *testing.T) {
+	var id string = "test"
+	var version byte = 0
 	var test int = 1
 
 	buffer := bytes.NewBuffer([]byte{})
-	writer := NewWriter(buffer)
+	writer := NewWriter(id, version, buffer)
 
 	writer.Write(&test)
 
@@ -42,12 +46,16 @@ func TestWriterWriteFailsWithUnacceptableValueForBinaryWrite(t *testing.T) {
 }
 
 func TestWriterWriteIgnoresValueWithError(t *testing.T) {
+	var id string = "test"
+	var version byte = 0
 	var test int64 = 1
 
 	buffer := bytes.NewBuffer([]byte{})
 	writer := &Writer{
-		writer: buffer,
-		err:    errors.New("dummy"),
+		id:      id,
+		version: version,
+		writer:  buffer,
+		err:     errors.New("dummy"),
 	}
 
 	writer.Write(&test)
@@ -60,11 +68,13 @@ func TestWriterWriteIgnoresValueWithError(t *testing.T) {
 }
 
 func TestReaderReadSucceedsWithAcceptableValueForBinaryRead(t *testing.T) {
+	var id string = "test"
+	var version byte = 0
 	var test int64 = 0
 	var expectation int64 = 1
 
 	buffer := bytes.NewReader([]byte{1, 0, 0, 0, 0, 0, 0, 0})
-	reader := NewReader(buffer)
+	reader := NewReader(id, version, buffer)
 
 	reader.Read(&test)
 
@@ -78,10 +88,12 @@ func TestReaderReadSucceedsWithAcceptableValueForBinaryRead(t *testing.T) {
 }
 
 func TestReaderReadFailsWithUnacceptableValueForBinaryWrite(t *testing.T) {
+	var id string = "test"
+	var version byte = 0
 	var test int64 = 0
 
 	buffer := bytes.NewReader([]byte{1, 0, 0, 0})
-	reader := NewReader(buffer)
+	reader := NewReader(id, version, buffer)
 
 	reader.Read(&test)
 
@@ -91,12 +103,16 @@ func TestReaderReadFailsWithUnacceptableValueForBinaryWrite(t *testing.T) {
 }
 
 func TestReaderReadIgnoresValueWithError(t *testing.T) {
+	var id string = "test"
+	var version byte = 0
 	var test int64 = 0
 
 	buffer := bytes.NewReader([]byte{1, 0, 0, 0, 0, 0, 0, 0})
 	reader := &Reader{
-		reader: buffer,
-		err:    errors.New("dummy"),
+		id:      id,
+		version: version,
+		reader:  buffer,
+		err:     errors.New("dummy"),
 	}
 
 	reader.Read(&test)

@@ -10,17 +10,33 @@ import (
 // it doesn't return any value.
 // The error can be obtained by calling (*Writer).Error.
 type Writer struct {
-	writer io.Writer
-	err    error
+	id      string
+	version byte
+	writer  io.Writer
+	err     error
 }
 
 // Create a wrapper of "encoding/binary"'s Write.
-func NewWriter(writer io.Writer) *Writer {
+func NewWriter(id string, version byte, writer io.Writer) *Writer {
 	w := &Writer{
-		writer: writer,
+		id:      id,
+		version: version,
+		writer:  writer,
 	}
 
 	return w
+}
+
+// Write the identifier of type by using (*Writer).Write.
+func (w *Writer) WriteId() {
+	for _, b := range []byte(w.id) {
+		w.Write(b)
+	}
+}
+
+// Write the version of byte-sequence representation by using (*Writer).Write.
+func (w *Writer) WriteVersion() {
+	w.Write(w.version)
 }
 
 // Write a value by using "encoding/binary"'s Write
