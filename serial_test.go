@@ -7,6 +7,37 @@ import (
 	"testing"
 )
 
+func TestConvertToArchTypeSucceedsFor386(t *testing.T) {
+	arch := "386"
+
+	if convertToArchType(arch) != ARCH_386 {
+		t.Fatal("366 should be converted to ARCH_386")
+	}
+}
+
+func TestConvertToArchTypeSucceedsForAmd64(t *testing.T) {
+	arch := "amd64"
+
+	if convertToArchType(arch) != ARCH_AMD64 {
+		t.Fatal("amd64 should be converted to ARCH_AMD64")
+	}
+}
+
+func TestConvertToArchTypeSucceedsForArm(t *testing.T) {
+	arch := "arm"
+
+	if convertToArchType(arch) != ARCH_AMD64 {
+		t.Fatal("arm should be converted to ARCH_ARM")
+	}
+}
+func TestConvertToArchTypeSucceedsForUnknown(t *testing.T) {
+	arch := "---"
+
+	if convertToArchType(arch) != ARCH_UNKNOW {
+		t.Fatal("--- should be converted to ARCH_UNKNOW")
+	}
+}
+
 func TestWriterWriteSucceedsWithAcceptableValueForBinaryWrite(t *testing.T) {
 	var id string = "test"
 	var version byte = 0
