@@ -67,6 +67,34 @@ func TestWriterWriteIgnoresValueWithError(t *testing.T) {
 	t.Fatal("A value should be ignored if the writer has an error.")
 }
 
+func TestWriteIdUsesWrite(t *testing.T) {
+	var id string = "test"
+	var version byte = 0
+
+	buffer := bytes.NewBuffer([]byte{})
+	writer := NewWriter(id, version, buffer)
+
+	writer.WriteId()
+
+	if err := writer.Error(); err != nil {
+		t.Fatalf("An expected error is caused with an acceptable value: %s", err)
+	}
+}
+
+func TestWriteVersionUsesWrite(t *testing.T) {
+	var id string = "test"
+	var version byte = 0
+
+	buffer := bytes.NewBuffer([]byte{})
+	writer := NewWriter(id, version, buffer)
+
+	writer.WriteVersion()
+
+	if err := writer.Error(); err != nil {
+		t.Fatalf("An expected error is caused with an acceptable value: %s", err)
+	}
+}
+
 func TestReaderReadSucceedsWithAcceptableValueForBinaryRead(t *testing.T) {
 	var id string = "test"
 	var version byte = 0
@@ -122,4 +150,88 @@ func TestReaderReadIgnoresValueWithError(t *testing.T) {
 	}
 
 	t.Fatal("A value should be ignored if the reader has an error.")
+}
+
+func TestReadIdSucceedsForValidId(t *testing.T) {
+	var id string = "test"
+	var version byte = 1
+
+	buffer := bytes.NewBuffer([]byte(id))
+	reader := NewReader(id, version, buffer)
+
+	reader.ReadId()
+
+	if err := reader.Error(); err != nil {
+		t.Fatalf("An expected error occured on reading a valid id: %s", err)
+	}
+}
+
+func TestReadIdFailsForIncompatibleVersion(t *testing.T) {
+	var id string = "test"
+	var version byte = 1
+
+	buffer := bytes.NewBuffer([]byte("tess"))
+	reader := NewReader(id, version, buffer)
+
+	reader.ReadId()
+
+	if err := reader.Error(); err == nil {
+		t.Fatal("An error should occur for an invalid id.")
+	}
+}
+
+func TestReadIdFailsWithFailureOfBinaryRead(t *testing.T) {
+	var id string = "test"
+	var version byte = 0
+
+	buffer := bytes.NewBuffer([]byte{})
+	reader := NewReader(id, version, buffer)
+
+	reader.ReadId()
+
+	if err := reader.Error(); err == nil {
+		t.Fatal("An error should be caused by \"binary\".Read.")
+	}
+}
+
+func TestReadVersionFailsWithFailureOfBinaryRead(t *testing.T) {
+	var id string = "test"
+	var version byte = 0
+
+	buffer := bytes.NewBuffer([]byte{})
+	reader := NewReader(id, version, buffer)
+
+	reader.ReadVersion()
+
+	if err := reader.Error(); err == nil {
+		t.Fatal("An error should be caused by \"binary\".Read.")
+	}
+}
+
+func TestReadVersionSucceedsForCompatibleVersion(t *testing.T) {
+	var id string = "test"
+	var version byte = 1
+
+	buffer := bytes.NewBuffer([]byte{version})
+	reader := NewReader(id, version, buffer)
+
+	reader.ReadVersion()
+
+	if err := reader.Error(); err != nil {
+		t.Fatalf("An expected error occured on reading compatible version: %s", err)
+	}
+}
+
+func TestReadVersionFailsForIncompatibleVersion(t *testing.T) {
+	var id string = "test"
+	var version byte = 1
+
+	buffer := bytes.NewBuffer([]byte{0})
+	reader := NewReader(id, version, buffer)
+
+	reader.ReadVersion()
+
+	if err := reader.Error(); err == nil {
+		t.Fatal("An error should occur for incompatible version.")
+	}
 }
