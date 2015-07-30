@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"io"
+	"runtime"
 )
 
 // Reader is a wrapper of "encoding/binary"'s Read.
@@ -61,6 +62,22 @@ func (r *Reader) ReadVersion() {
 
 	if r.version != version {
 		r.err = errors.New(INCOMPATIBLE_VERSION_ERROR)
+		return
+	}
+}
+
+// Read the archtecture by using (*Reader).Read.
+func (r *Reader) ReadArch() {
+	var arch byte
+
+	r.Read(&arch)
+
+	if r.Error() != nil {
+		return
+	}
+
+	if convertToArchType(runtime.GOARCH) != arch {
+		r.err = errors.New(INCOMPATIBLE_ARCH_ERROR)
 		return
 	}
 }

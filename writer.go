@@ -3,6 +3,7 @@ package serial
 import (
 	"encoding/binary"
 	"io"
+	"runtime"
 )
 
 // Writer is a wrapper of "encoding/binary"'s Write.
@@ -37,6 +38,11 @@ func (w *Writer) WriteId() {
 // Write the version of byte-sequence representation by using (*Writer).Write.
 func (w *Writer) WriteVersion() {
 	w.Write(w.version)
+}
+
+// Write the current archtechture by using (*Writer).Write.
+func (w *Writer) WriteArch() {
+	w.Write(convertToArchType(runtime.GOARCH))
 }
 
 // Write a value by using "encoding/binary"'s Write

@@ -3,6 +3,7 @@ package serial
 import (
 	"bytes"
 	"errors"
+	"runtime"
 	"testing"
 )
 
@@ -89,6 +90,20 @@ func TestWriteVersionUsesWrite(t *testing.T) {
 	writer := NewWriter(id, version, buffer)
 
 	writer.WriteVersion()
+
+	if err := writer.Error(); err != nil {
+		t.Fatalf("An expected error is caused with an acceptable value: %s", err)
+	}
+}
+
+func TestWriteArchUsesWrite(t *testing.T) {
+	var id string = "test"
+	var version byte = 0
+
+	buffer := bytes.NewBuffer([]byte{})
+	writer := NewWriter(id, version, buffer)
+
+	writer.WriteArch()
 
 	if err := writer.Error(); err != nil {
 		t.Fatalf("An expected error is caused with an acceptable value: %s", err)
@@ -230,6 +245,48 @@ func TestReadVersionFailsForIncompatibleVersion(t *testing.T) {
 	reader := NewReader(id, version, buffer)
 
 	reader.ReadVersion()
+
+	if err := reader.Error(); err == nil {
+		t.Fatal("An error should occur for incompatible version.")
+	}
+}
+
+func TestReadArchFailsWithFailureOfBinaryRead(t *testing.T) {
+	var id string = "test"
+	var version byte = 0
+
+	buffer := bytes.NewBuffer([]byte{})
+	reader := NewReader(id, version, buffer)
+
+	reader.ReadArch()
+
+	if err := reader.Error(); err == nil {
+		t.Fatal("An error should be caused by \"binary\".Read.")
+	}
+}
+
+func TestReadArchSucceedsForCompatibleArch(t *testing.T) {
+	var id string = "test"
+	var version byte = 1
+
+	buffer := bytes.NewBuffer([]byte{convertToArchType(runtime.GOARCH)})
+	reader := NewReader(id, version, buffer)
+
+	reader.ReadArch()
+
+	if err := reader.Error(); err != nil {
+		t.Fatalf("An expected error occured on reading compatible version: %s", err)
+	}
+}
+
+func TestReadArchFailsForIncompatibleArch(t *testing.T) {
+	var id string = "test"
+	var version byte = 1
+
+	buffer := bytes.NewBuffer([]byte{254})
+	reader := NewReader(id, version, buffer)
+
+	reader.ReadArch()
 
 	if err := reader.Error(); err == nil {
 		t.Fatal("An error should occur for incompatible version.")
