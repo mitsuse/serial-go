@@ -60,6 +60,14 @@ func TestWriterWriteSucceedsWithAcceptableValueForBinaryWrite(t *testing.T) {
 			t.Fatalf("An element at the index %d should be %d, but is %d.", i, b, r)
 		}
 	}
+
+	if len(expectation) != len(result) {
+		t.Fatalf(
+			"The size of byte-sequence representation should be %d, but is %d.",
+			len(expectation),
+			len(result),
+		)
+	}
 }
 
 func TestWriterWriteFailsWithUnacceptableValueForBinaryWrite(t *testing.T) {
